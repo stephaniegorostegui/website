@@ -1,6 +1,6 @@
 ---
 import { storyblokEditable } from '@storyblok/astro'
-import { Image } from 'astro:assets'
+import Image from './utils/SafeImage.astro'
 import RichText from './utils/RichText.astro'
 
 const { blok } = Astro.props
@@ -17,16 +17,18 @@ let foregroundColor = blok.foregroundColorInvert ? 'text-base-100' : 'text-base-
 
     <div id="my-keen-slider" class="z-[-1] keen-slider hero min-h-screen grid">
       {
-        blok.images.map((image) => (
+        blok.images?.map((image) => (
           <div class="keen-slider__slide number-slide1 w-full h-screen">
-            <Image
-              src={image?.filename}
-              alt={image?.alt}
-              class="max-h-screen object-cover h-full w-full"
-              priority={image?.loading === 'eager' ? true : false}
-              layout="full-width"
-              inferSize
-            />
+            {image?.filename && (
+              <Image
+                src={image?.filename}
+                alt={image?.alt}
+                class="max-h-screen object-cover h-full w-full"
+                priority={image?.loading === 'eager' ? true : false}
+                layout="full-width"
+                inferSize
+              />
+            )}
           </div>
         ))
       }
@@ -34,15 +36,22 @@ let foregroundColor = blok.foregroundColorInvert ? 'text-base-100' : 'text-base-
     <div class="rs absolute bottom-8 left-8">
       <div class="rs gap-5 flex">
         {
-          blok.socials.map((reseau: any) => (
+          blok.socials?.map((reseau: any) => (
             <a
-              href={reseau.url.url}
+              href={reseau.url?.url}
               class={`icones-social-12 ${reseau.name}`}
               rel="external noopener noreferrer"
               title={`Voir notre page ${reseau.name}`}
               target="_blank"
               aria-label={`lien vers ${reseau.name}`}>
-              {reseau.icon.filename && <img src={reseau.icon.filename} class={`rs-icon w-12 h-auto`} />}
+              {reseau.icon?.filename && (
+                <img
+                  src={reseau.icon.filename}
+                  class={`rs-icon w-12 h-auto`}
+                  loading="lazy"
+                  onerror="this.style.display='none'"
+                />
+              )}
             </a>
           ))
         }

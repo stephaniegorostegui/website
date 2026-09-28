@@ -1,6 +1,6 @@
 ---
 import { storyblokEditable } from '@storyblok/astro'
-import { Image } from 'astro:assets'
+import Image from './utils/SafeImage.astro'
 import RichText from './utils/RichText.astro'
 const { blok } = Astro.props
 ---
@@ -29,7 +29,7 @@ const { blok } = Astro.props
   </div>
   {
     blok.content && (
-      <div class={`leading-relaxed flex justify-center mt-8 ${blok.content.content.length < 3 ? 'text-center' : ''}`}>
+      <div class={`leading-relaxed flex justify-center mt-8 ${blok.content?.content?.length < 3 ? 'text-center' : ''}`}>
         <RichText content={blok.content} />
       </div>
     )

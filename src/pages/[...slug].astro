@@ -29,9 +29,9 @@ let story = data.story
 let first_image = true
 
 if (story.content.component != 'theme') {
-  story.content.body.map((item) => {
-    if (first_image) {
-      if ('image' in item) {
+  story.content.body?.map((item) => {
+    if (first_image && item && typeof item === 'object') {
+      if ('image' in item && item.image && typeof item.image === 'object') {
         first_image = false
         item.image.loading = 'eager'
       }

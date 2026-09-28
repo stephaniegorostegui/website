@@ -1,6 +1,6 @@
 ---
 import InlineSvg from '../utils/InlineSvg.astro'
-import { Image } from 'astro:assets'
+import Image from '../utils/SafeImage.astro'
 const { logo, name, slogan, menu, rs } = Astro.props
 ---
 
@@ -8,7 +8,7 @@ const { logo, name, slogan, menu, rs } = Astro.props
   <div class="footer md:footer-horizontal items-baseline justify-around">
     <aside>
       {
-        logo?.filename && logo.filename.endsWith('.svg') && (
+        logo?.filename && logo.filename?.endsWith('.svg') && (
           <InlineSvg
             src={logo.filename}
             class="pure rounded-[var(--radius-box)] max-h-32 w-32"
@@ -17,7 +17,7 @@ const { logo, name, slogan, menu, rs } = Astro.props
         )
       }
       {
-        logo?.filename && !logo.filename.endsWith('.svg') && (
+        logo?.filename && !logo.filename?.endsWith('.svg') && (
           <Image
             src={logo.filename}
             alt={logo.alt}
@@ -63,13 +63,20 @@ const { logo, name, slogan, menu, rs } = Astro.props
         {
           rs?.map((reseau: any) => (
             <a
-              href={reseau.url.url}
+              href={reseau.url?.url}
               class={`icones-social-12 ${reseau.name}`}
               rel="external noopener noreferrer"
               title={`Voir notre page ${reseau.name}`}
               target="_blank"
               aria-label={`lien vers ${reseau.name}`}>
-              {reseau.icon.filename && <img src={reseau.icon.filename} class={`rs-icon w-12 h-auto`} />}
+              {reseau.icon?.filename && (
+                <img
+                  src={reseau.icon.filename}
+                  class={`rs-icon w-12 h-auto`}
+                  loading="lazy"
+                  onerror="this.style.display='none'"
+                />
+              )}
             </a>
           ))
         }

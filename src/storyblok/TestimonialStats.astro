@@ -59,7 +59,7 @@ const { blok } = Astro.props
               blok.stats.map((stat, idx) => (
                 <li class="flex flex-col -m-0.5 p-4 sm:p-8">
                   <div class="flex items-end gap-x-2 text-3xl sm:text-5xl font-bold text-base-content/75 mb-2">
-                    {stat.icon?.filename.endsWith('.svg') ? (
+                    {stat.icon?.filename?.endsWith('.svg') ? (
                       <span class="text-accent">
                         <InlineSvg src={stat.icon.filename} />
                       </span>

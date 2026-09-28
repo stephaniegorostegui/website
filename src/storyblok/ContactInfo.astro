@@ -2,7 +2,7 @@
 import { storyblokEditable } from '@storyblok/astro'
 import RichText from './utils/RichText.astro'
 import Heading from './utils/Heading.astro'
-import { Image } from 'astro:assets'
+import Image from './utils/SafeImage.astro'
 import InlineSvg from './utils/InlineSvg.astro'
 const { blok } = Astro.props
 ---
@@ -40,13 +40,13 @@ const { blok } = Astro.props
             <div>
               <Heading tag={info.tag} classlist="mb-5 font-semibold" content={info.title} />
               <div class="grid  gap-4 sm:gap-6 md:gap-8 lg:gap-12">
-                {info.items.map((item) => (
+                {info.items?.map((item) => (
                   <div class="flex gap-4">
-                    {item.image && (
+                    {item.image?.filename && (
                       <div class="shrink-0 size-5">
-                        {item.image.filename.endsWith('.svg') && <InlineSvg src={item.image.filename} />}
-                        {!item.image.filename.endsWith('.svg') && (
-                          <NetlifyImage src={item.image.filename} alt={item.image.alt} />
+                        {item.image.filename?.endsWith('.svg') && <InlineSvg src={item.image.filename} />}
+                        {!item.image.filename?.endsWith('.svg') && item.image.filename && (
+                          <Image src={item.image.filename} alt={item.image.alt} />
                         )}
                       </div>
                     )}

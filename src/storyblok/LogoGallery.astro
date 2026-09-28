@@ -2,11 +2,11 @@
 import { storyblokEditable } from '@storyblok/astro'
 import RichText from './utils/RichText.astro'
 import InlineSvg from './utils/InlineSvg.astro'
-import { Image } from 'astro:assets'
+import Image from './utils/SafeImage.astro'
 
 const { blok } = Astro.props
 
-blok.logos?.map((item) => (item.isSvg = item.filename.endsWith('.svg')))
+blok.logos?.map((item) => (item.isSvg = item.filename?.endsWith('.svg')))
 ---
 
 <section class="container" {...storyblokEditable(blok)} data-aos="fade-up">

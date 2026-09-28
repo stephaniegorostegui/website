@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import Image from '../utils/SafeImage.astro'
 import InlineSvg from '../utils/InlineSvg.astro'
 const { logo, name, menu } = Astro.props
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/'
@@ -14,12 +14,12 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/'
         href="/"
         aria-label={name}>
         {
-          logo?.filename && logo.filename.endsWith('.svg') && (
+          logo?.filename && logo.filename?.endsWith('.svg') && (
             <InlineSvg src={logo.filename} class="pure w-64 " innerclass="h-[90px]" />
           )
         }
         {
-          logo?.filename && !logo.filename.endsWith('.svg') && (
+          logo?.filename && !logo.filename?.endsWith('.svg') && (
             <Image
               src={logo.filename}
               alt={name}

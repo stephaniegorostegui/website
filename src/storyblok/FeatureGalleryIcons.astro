@@ -1,6 +1,6 @@
 ---
 import { storyblokEditable } from '@storyblok/astro'
-import { Image } from 'astro:assets'
+import Image from './utils/SafeImage.astro'
 import InlineSvg from './utils/InlineSvg.astro'
 import Heading from './utils/Heading.astro'
 import RichText from './utils/RichText.astro'
@@ -9,13 +9,11 @@ let { blok } = Astro.props
 blok.icons?.map((icon) => {
   if (icon.image) {
     icon.image.isSvg = false
-    if (icon.image?.filename.endsWith('.svg')) {
+    if (icon.image?.filename?.endsWith('.svg')) {
       icon.image.isSvg = true
     }
   }
 })
-
-console.log('FeatureGalleryIcons blok', blok.icons.image?.filename)
 ---
 
 <section class="container" {...storyblokEditable(blok)}>
