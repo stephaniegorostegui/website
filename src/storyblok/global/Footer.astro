@@ -45,8 +45,8 @@ const showSocialsAsColumn = hasSocials && socialColumnIndex !== -1
         logo?.filename && logo.filename?.endsWith('.svg') && (
           <InlineSvg
             src={logo.filename}
-            class="pure rounded-[var(--radius-box)] max-h-32 w-32"
-            innerclass="h-auto max-h-64 w-64"
+            class="pure rounded-[var(--radius-box)] max-h-48 w-48"
+            innerclass="h-auto max-h-48 w-48"
           />
         )
       }
@@ -55,7 +55,7 @@ const showSocialsAsColumn = hasSocials && socialColumnIndex !== -1
           <Image
             src={logo.filename}
             alt={logo.alt}
-            class="pure rounded-[var(--radius-box)] h-auto max-h-64 w-64"
+            class="pure rounded-[var(--radius-box)] h-auto max-h-48 w-48"
             layout="constrained"
             inferSize
           />
@@ -63,7 +63,7 @@ const showSocialsAsColumn = hasSocials && socialColumnIndex !== -1
       }
       {
         hasBrandText && (
-          <p>
+          <p class="w-48">
             {brandName}
             {brandName && brandSlogan ? <br /> : null}
             {brandSlogan}
