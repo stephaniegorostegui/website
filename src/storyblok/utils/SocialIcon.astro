@@ -1,0 +1,36 @@
+---
+import { getSocialIconKey, socialIconPaths } from './socialIcons'
+
+interface Props {
+  name?: string
+  icon?: { filename?: string; alt?: string } | null
+  class?: string
+}
+
+const { name = '', icon, class: className = 'h-5 w-5' } = Astro.props
+const iconPath = socialIconPaths[getSocialIconKey(name) ?? '']
+---
+
+{
+  icon?.filename ? (
+    <img
+      src={icon.filename}
+      alt=""
+      aria-hidden="true"
+      class={`${className} object-contain`}
+      loading="lazy"
+      decoding="async"
+      onerror="this.style.display='none'"
+    />
+  ) : iconPath ? (
+    <svg
+      class={`${className} fill-current`}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      set:html={iconPath}
+    />
+  ) : (
+    <span class="text-xs font-medium">{name}</span>
+  )
+}

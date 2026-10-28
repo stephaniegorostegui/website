@@ -1,0 +1,36 @@
+---
+import SocialIcon from './SocialIcon.astro'
+
+interface SocialLink {
+  url: string
+  label: string
+  icon?: { filename?: string; alt?: string } | null
+}
+
+interface Props {
+  links?: SocialLink[]
+  class?: string
+}
+
+const { links = [], class: className = '' } = Astro.props
+---
+
+{
+  links.length > 0 && (
+    <ul class={`flex flex-wrap items-center gap-3 ${className}`.trim()}>
+      {links.map((link) => (
+        <li class="flex">
+          <a
+            href={link.url}
+            class="inline-flex items-center justify-center text-base-content/75 transition-colors hover:text-base-content"
+            rel="noopener noreferrer"
+            target="_blank"
+            title={`Voir notre page ${link.label}`}
+            aria-label={`${link.label} (nouvel onglet)`}>
+            <SocialIcon name={link.label} icon={link.icon} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

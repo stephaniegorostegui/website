@@ -36,10 +36,10 @@ const menu = data.story.content.menu.map((item) => {
   }
 })
 
-const footer = data.story.content.footer.map((item) => {
+const footer = (data.story.content.footer ?? []).map((item) => {
   return {
     name: item.Nom,
-    pages: item.page.map((subitem) => {
+    pages: (item.page ?? []).map((subitem) => {
       return {
         name: subitem.name,
         slug: subitem.full_slug === 'home' ? '/' : withTrailingSlash('/' + subitem.full_slug)

@@ -1,7 +1,37 @@
 ---
 import InlineSvg from '../utils/InlineSvg.astro'
 import Image from '../utils/SafeImage.astro'
+import SocialLinks from '../utils/SocialLinks.astro'
+
 const { logo, name, slogan, menu, rs } = Astro.props
+
+const normalizeSocialUrl = (value: unknown): string | null => {
+  const raw = typeof value === 'string' ? value : (value as { url?: unknown } | null)?.url
+  const url = typeof raw === 'string' ? raw.trim() : ''
+
+  if (!url) return null
+
+  return /^(https?:|mailto:|tel:|\/)/i.test(url) ? url : `https://${url}`
+}
+
+const socialLinks = (Array.isArray(rs) ? rs : [])
+  .map((reseau: any) => ({
+    url: normalizeSocialUrl(reseau?.url),
+    label: (reseau?.name || reseau?.icon?.alt || '').trim(),
+    icon: reseau?.icon
+  }))
+  .filter((reseau) => reseau.url && reseau.label)
+
+const footerMenu = (Array.isArray(menu) ? menu : []).map((cat) => ({
+  ...cat,
+  pages: Array.isArray(cat.pages) ? cat.pages : []
+}))
+
+// A footer column without page links (e.g. "Suivez-moi") is used to display
+// the social networks. When there is no such column, they sit under the logo.
+const socialColumnIndex = footerMenu.findIndex((cat) => cat.pages.length === 0)
+const hasSocials = socialLinks.length > 0
+const showSocialsAsColumn = hasSocials && socialColumnIndex !== -1
 ---
 
 <footer class="bg-base-200 text-base-content p-10">
@@ -32,56 +62,46 @@ const { logo, name, slogan, menu, rs } = Astro.props
         <br />
         {slogan}
       </p>
+      {hasSocials && !showSocialsAsColumn && <SocialLinks links={socialLinks} class="mt-4" />}
     </aside>
     {
-      menu.map((cat) => {
+      footerMenu.map((cat, index) => {
+        if (cat.pages.length === 0) {
+          if (showSocialsAsColumn && index === socialColumnIndex) {
+            return (
+              <nav aria-label={cat.name}>
+                <p class="footer-title opacity-100">{cat.name}</p>
+                <SocialLinks links={socialLinks} />
+              </nav>
+            )
+          }
+
+          return null
+        }
+
         if (cat.pages.length === 1) {
           return (
             <a class="link link-hover footer-title opacity-100" href={cat.pages[0].slug}>
               {cat.pages[0].name}
             </a>
           )
-        } else {
-          return (
-            <nav>
-              <p class="footer-title opacity-100">{cat.name}</p>
-              {cat.pages.map((item) => (
-                <a class="link link-hover" href={item.slug}>
-                  {item.name}
-                </a>
-              ))}
-            </nav>
-          )
         }
+
+        return (
+          <nav>
+            <p class="footer-title opacity-100">{cat.name}</p>
+            {cat.pages.map((item) => (
+              <a class="link link-hover" href={item.slug}>
+                {item.name}
+              </a>
+            ))}
+          </nav>
+        )
       })
     }
   </div>
 
-  <div class="border-t mt-8 flex justify-between pt-8">
-    <div class="rs self-baseline">
-      <div class="rs gap-5 flex">
-        {
-          rs?.map((reseau: any) => (
-            <a
-              href={reseau.url?.url}
-              class={`icones-social-12 ${reseau.name}`}
-              rel="external noopener noreferrer"
-              title={`Voir notre page ${reseau.name}`}
-              target="_blank"
-              aria-label={`lien vers ${reseau.name}`}>
-              {reseau.icon?.filename && (
-                <img
-                  src={reseau.icon.filename}
-                  class={`rs-icon w-12 h-auto`}
-                  loading="lazy"
-                  onerror="this.style.display='none'"
-                />
-              )}
-            </a>
-          ))
-        }
-      </div>
-    </div>
+  <div class="border-t mt-8 flex justify-end pt-8">
     <aside>
       <div
         class="md:row-start-2 md:col-span-4 col-span-1 mt-2 body-sm flex flex-col gap-4 justify-self-center lg:justify-self-end">
