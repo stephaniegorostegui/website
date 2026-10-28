@@ -5,6 +5,10 @@ import SocialLinks from '../utils/SocialLinks.astro'
 
 const { logo, name, slogan, menu, rs } = Astro.props
 
+const brandName = typeof name === 'string' ? name.trim() : ''
+const brandSlogan = typeof slogan === 'string' ? slogan.trim() : ''
+const hasBrandText = Boolean(brandName || brandSlogan)
+
 const normalizeSocialUrl = (value: unknown): string | null => {
   const raw = typeof value === 'string' ? value : (value as { url?: unknown } | null)?.url
   const url = typeof raw === 'string' ? raw.trim() : ''
@@ -57,11 +61,15 @@ const showSocialsAsColumn = hasSocials && socialColumnIndex !== -1
           />
         )
       }
-      <p>
-        {name}
-        <br />
-        {slogan}
-      </p>
+      {
+        hasBrandText && (
+          <p>
+            {brandName}
+            {brandName && brandSlogan ? <br /> : null}
+            {brandSlogan}
+          </p>
+        )
+      }
       {hasSocials && !showSocialsAsColumn && <SocialLinks links={socialLinks} class="mt-4" />}
     </aside>
     {
