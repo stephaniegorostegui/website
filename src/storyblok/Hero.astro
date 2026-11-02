@@ -33,7 +33,7 @@ let foregroundColor = blok.foregroundColorInvert ? 'text-base-100' : 'text-base-
             inferSize
           />
         )}
-        <div class="hero-overlay" />
+        {!blok.hideOverlay && <div class="hero-overlay" />}
         <div class="hero-content container text-center">
           <div class={'rich-text ' + foregroundColor} data-aos="zoom-in">
             <RichText content={blok.content} />
